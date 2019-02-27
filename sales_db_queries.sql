@@ -243,6 +243,7 @@ ORDER BY COUNT(*) DESC;
  Folies gourmandes                  |     1
 (74 rows)
 
+
 -- 8. SELECT EMPLOYEE AND THEIR ORDERS COUNT ORDER BY DESC
 SELECT e.employeeid, e.firstname, e.lastname, COUNT(*) FROM employees e
 INNER JOIN orders o ON o.employeeid = e.employeeid
@@ -262,17 +263,19 @@ ORDER BY COUNT(*) DESC;
           9 | Anne      | Dodsworth |     6
 (9 rows)
 
+
 -- 9. SELECT WHICH ORDER IS 
 -- ORDERED BY WHICH CUSTOMER
 -- SERVED BY WHICH EMPLOYEE
 -- SHIPPED BY WHICH SHIPPER
 -- OREDR ID FOR FIRST 10 ORDERS
 
-SELECT c.customername, e.firstname||' '||e.lastname as employeename, s.shippername, o.orderid FROM orders o
-INNER JOIN customers c ON c.customerid = o.customerid
-INNER JOIN employees e ON o.employeeid = e.employeeid
-INNER JOIN shippers s ON s.shipperid = o.shipperid
-LIMIT 10;
+ SELECT c.customername, e.firstname||' '||e.lastname as employeename, s.shippername, o.orderid FROM orders o
+ INNER JOIN customers c ON c.customerid = o.customerid
+ INNER JOIN employees e ON o.employeeid = e.employeeid
+ INNER JOIN shippers s ON s.shipperid = o.shipperid
+ LIMIT 10;
+
 
       customername      |   employeename   |   shippername    | orderid 
 ------------------------+------------------+------------------+---------
