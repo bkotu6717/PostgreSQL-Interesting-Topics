@@ -1,4 +1,3 @@
-  ![SQL Joins](http://www.postgresqltutorial.com/wp-content/uploads/2018/03/PostgreSQL-Self-Join-Reporting-Structure.png)
 
 
 -- Self Join is used to Join the table with itlsef
@@ -29,20 +28,8 @@ VALUES
  (8, 'Salley', 'Lester', 3);
 
 
--- List employee table data
 
- employee_id | first_name |  last_name  | manager_id 
--------------+------------+-------------+------------
-           1 | Windy      | Hays        |           
-           2 | Ava        | Christensen |          1
-           3 | Hassan     | Conner      |          1
-           4 | Anna       | Reeves      |          2
-           5 | Sau        | Norman      |          2
-           6 | Kelsie     | Hays        |          3
-           7 | Tory       | Goff        |          3
-           8 | Salley     | Lester      |          3
-           
-           
+
  -- To find who reports to whom, you use the following query:
 
 SELECT e.first_name || ' ' || e.last_name employee_name, m.first_name|| ' ' || m.last_name  manager FROM employee e INNER JOIN employee m ON e.manager_id = m.employee_id;
@@ -75,28 +62,29 @@ SELECT e.first_name || ' ' || e.last_name employee_name, m.first_name|| ' ' || m
 
 
 -- Find the number of employees each manager is managing
+select m.manager_id,m.first_name, m.last_name, count(e.employee_id) from employee e inner join employee m on e.manager_id = m.employee_id group by m.manager_id, m.first_name, m.last_name;
 
-select m.manager_id, count(e.employee_id) no_of_employees from employee e inner join employee m on e.employee_id = m.manager_id group by m.manager_id;
+manager_id | first_name |  last_name  | count 
+------------+------------+-------------+-------
+            | Windy      | Hays        |     2
+          1 | Ava        | Christensen |     2
+          1 | Hassan     | Conner      |     3
 
- manager_id | no_of_employees 
-------------+-----------------
-          3 |               3
-          1 |               2
-          2 |               2
 
 -- Find the number of managers each employee is reporting
 
-SELECT e.employee_id, count(m.manager_id) no_of_managers from employee e inner join employee m on e.manager_id = m.employee_id group by e.employee_id;
+ select e.employee_id, e.first_name, e.last_name, count(m.manager_id) from employee e inner join employee m on e.manager_id = m.employee_id and group by e.employee_id, e.first_name, e.last_name;
+ 
+ employee_id | first_name |  last_name  | count 
+-------------+------------+-------------+-------
+           8 | Salley     | Lester      |     1
+           3 | Hassan     | Conner      |     0
+           4 | Anna       | Reeves      |     1
+           6 | Kelsie     | Hays        |     1
+           2 | Ava        | Christensen |     0
+           5 | Sau        | Norman      |     1
+           7 | Tory       | Goff        |     1
 
- employee_id | no_of_managers 
--------------+----------------
-           8 |              1
-           3 |              0
-           4 |              1
-           6 |              1
-           2 |              0
-           5 |              1
-           7 |              1
 
 
 -- Select employees who are only employees but not managers
@@ -118,3 +106,14 @@ SELECT * FROM employee WHERE manager_id IS NULL;
  employee_id | first_name | last_name | manager_id 
 -------------+------------+-----------+------------
            1 | Windy      | Hays      |           
+
+
+-- Select all managers
+
+select * from employee where employee_id in (select manager_id from employee where manager_id is not null);
+ 
+ employee_id | first_name |  last_name  | manager_id 
+-------------+------------+-------------+------------
+           1 | Windy      | Hays        |           
+           2 | Ava        | Christensen |          1
+           3 | Hassan     | Conner      |          1
